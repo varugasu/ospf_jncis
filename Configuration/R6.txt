@@ -12,3 +12,4 @@ edit protocols ospf
 set area 2 interface ge-0/0/0.0 interface-type p2p
 set area 2 interface ge-0/0/0.0 authentication md5 1 key junos123
 set area 2 interface lo0.0 passive
+set area 2 stub

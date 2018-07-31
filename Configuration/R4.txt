@@ -8,7 +8,14 @@ set lo0 unit 0 family inet address 10.1.255.4/32 primary
 set ge-0/0/0 unit 0 family inet address 10.3.4.4/24
 top
 set routing-options router-id 10.1.255.4
+set routing-options static route 192.168.1.0/24 discard no-install
+set routing-options static route 192.168.2.0/24 discard no-install
+set routing-options static route 192.168.3.0/24 discard no-install
+set policy-options policy-statement ADVERTISE_EXTERNAL_IN_OSPF term 10 from protocol static
+set policy-options policy-statement ADVERTISE_EXTERNAL_IN_OSPF term 10 then accept
 edit protocols ospf
 set area 3 interface ge-0/0/0.0 interface-type p2p
 set area 3 interface ge-0/0/0.0 authentication md5 1 key junos123
 set area 3 interface lo0.0 passive
+set area 3 nssa
+set export ADVERTISE_EXTERNAL_IN_OSPF
