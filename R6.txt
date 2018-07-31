@@ -1,0 +1,14 @@
+root
+cli
+configure
+set system host-name R6
+set system root-authentication enc junos123
+edit interfaces
+set lo0 unit 0 family inet address 10.1.255.6/32 primary
+set ge-0/0/0 unit 0 family inet address 10.5.6.6/24
+top
+set routing-options router-id 10.1.255.6
+edit protocols ospf
+set area 2 interface ge-0/0/0.0 interface-type p2p
+set area 2 interface ge-0/0/0.0 authentication md5 1 key junos123
+set area 2 interface lo0.0 passive

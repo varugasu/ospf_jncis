@@ -1,0 +1,17 @@
+root
+cli
+configure
+set system host-name R7
+set system root-authentication enc junos123
+edit interfaces
+set lo0 unit 0 family inet address 10.1.255.7/32 primary
+set ge-0/0/0 unit 0 family inet address 10.1.7.7/24
+set ge-0/0/1 unit 0 family inet address 10.7.8.7/24
+top
+set routing-options router-id 10.1.255.7
+edit protocols ospf
+set area 1 interface ge-0/0/0.0 interface-type p2p
+set area 1 interface ge-0/0/0.0 authentication md5 1 key junos123
+set area 1 interface ge-0/0/1.0 interface-type p2p
+set area 1 interface ge-0/0/1.0 authentication md5 1 key junos123
+set area 1 interface lo0.0 passive
