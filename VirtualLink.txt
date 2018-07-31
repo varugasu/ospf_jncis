@@ -1,0 +1,107 @@
+root@R8> show ospf database           
+
+    OSPF database, Area 0.0.0.1
+ Type       ID               Adv Rtr           Seq      Age  Opt  Cksum  Len 
+Router   10.1.255.1       10.1.255.1       0x80000004  2557  0x22 0x458a  48
+Router   10.1.255.7       10.1.255.7       0x80000007  1773  0x22 0x6cc6  84
+Router  *10.1.255.8       10.1.255.8       0x80000004   152  0x22 0x1673  60
+Summary  10.1.2.0         10.1.255.1       0x80000005  1506  0x22 0x7ea0  28
+Summary  10.1.255.1       10.1.255.1       0x80000005  1153  0x22 0x80a0  28
+Summary  10.1.255.2       10.1.255.1       0x80000004   624  0x22 0x829d  28
+Summary  10.1.255.3       10.1.255.1       0x80000003  1683  0x22 0x849a  28
+Summary  10.1.255.4       10.1.255.1       0x80000003   800  0x22 0x8498  28
+Summary  10.1.255.5       10.1.255.1       0x80000003   271  0x22 0x70ac  28
+Summary  10.1.255.6       10.1.255.1       0x80000002  2910  0x22 0x72a9  28
+Summary *10.1.255.9       10.1.255.8       0x80000002  1654  0x22 0x16fd  28
+Summary  10.2.3.0         10.1.255.1       0x80000004   447  0x22 0x73a9  28
+Summary  10.2.5.0         10.1.255.1       0x80000003  2734  0x22 0x5fbc  28
+Summary  10.3.4.0         10.1.255.1       0x80000003  2205  0x22 0x68b2  28
+Summary  10.5.6.0         10.1.255.1       0x80000003    95  0x22 0x3adc  28
+Summary *10.8.9.0         10.1.255.8       0x80000003   527  0x22 0xb655  28
+
+    OSPF database, Area 0.0.0.4
+ Type       ID               Adv Rtr           Seq      Age  Opt  Cksum  Len 
+Router  *10.1.255.8       10.1.255.8       0x80000003  2013  0x22 0x7235  48
+Router   10.1.255.9       10.1.255.9       0x80000004  1657  0x22 0x7f02  60
+Summary *10.1.7.0         10.1.255.8       0x80000002  2731  0x22 0x2de7  28
+Summary *10.1.255.7       10.1.255.8       0x80000002  2372  0x22 0x2aeb  28
+Summary *10.1.255.8       10.1.255.8       0x80000003  1276  0x22 0x1401  28
+Summary *10.7.8.0         10.1.255.8       0x80000003   902  0x22 0xcd40  28
+
+
+
+Checking "Summary *10.1.255.9       10.1.255.8       0x80000002  1654  0x22 0x16fd  28"
+When R1 receives this Network LSA (Type 3), it will not create network summary for 10.1.255.9
+This is an OSPF mecanism to prevent loops: Never creates a network summary LSA to represent a network summary LSA
+
+Configuring a Virtual Link:
+
+    [edit]
+    root@R1# set protocols ospf area 0.0.0.0 virtual-link neighbor-id 10.1.255.8 transit-area 0.0.0.1
+
+    [edit]
+    root@R8# set protocols ospf area 0.0.0.0 virtual-link neighbor-id 10.1.255.1 transit-area 0.0.0.1
+
+root@R8> show ospf database 
+
+    OSPF database, Area 0.0.0.0
+ Type       ID               Adv Rtr           Seq      Age  Opt  Cksum  Len 
+Router   10.1.255.1       10.1.255.1       0x80000008     8  0x22 0xa4e0  72
+Router   10.1.255.2       10.1.255.2       0x80000006   412  0x22 0x1758  84
+Router   10.1.255.3       10.1.255.3       0x80000006    63  0x22 0xf3c0  60
+Router  *10.1.255.8       10.1.255.8       0x80000001     7  0x22 0xa13a  36
+Summary  10.1.7.0         10.1.255.1       0x80000005  2144  0x22 0x47d2  28
+Summary *10.1.7.0         10.1.255.8       0x80000001     7  0x22 0x2fe6  28
+Summary  10.1.255.4       10.1.255.3       0x80000003  1474  0x22 0x64b8  28
+Summary  10.1.255.5       10.1.255.2       0x80000003   941  0x22 0x60bc  28
+Summary  10.1.255.6       10.1.255.2       0x80000003   588  0x22 0x60ba  28
+Summary  10.1.255.7       10.1.255.1       0x80000003   203  0x22 0x52c9  28
+Summary *10.1.255.7       10.1.255.8       0x80000001     7  0x22 0x2cea  28
+Summary  10.1.255.8       10.1.255.1       0x80000002  2667  0x22 0x54c6  28
+Summary *10.1.255.8       10.1.255.8       0x80000001     7  0x22 0x18fe  28
+Summary *10.1.255.9       10.1.255.8       0x80000001     7  0x22 0x18fc  28
+Summary  10.2.5.0         10.1.255.2       0x80000004  1823  0x22 0x4dcd  28
+Summary  10.3.4.0         10.1.255.3       0x80000005  2004  0x22 0x44d4  28
+Summary  10.5.6.0         10.1.255.2       0x80000003   765  0x22 0x2aec  28
+Summary  10.7.8.0         10.1.255.1       0x80000003  2843  0x22 0x212   28
+Summary *10.7.8.0         10.1.255.8       0x80000001     7  0x22 0xd13e  28
+Summary *10.8.9.0         10.1.255.8       0x80000001     7  0x22 0xba53  28
+                                        
+    OSPF database, Area 0.0.0.1
+ Type       ID               Adv Rtr           Seq      Age  Opt  Cksum  Len 
+Router   10.1.255.1       10.1.255.1       0x80000006     9  0x22 0x4d7c  48
+Router   10.1.255.7       10.1.255.7       0x80000007  2588  0x22 0x6cc6  84
+Router  *10.1.255.8       10.1.255.8       0x80000005     7  0x22 0x2064  60
+Summary  10.1.2.0         10.1.255.1       0x80000005  2321  0x22 0x7ea0  28
+Summary  10.1.255.1       10.1.255.1       0x80000005  1968  0x22 0x80a0  28
+Summary  10.1.255.2       10.1.255.1       0x80000004  1439  0x22 0x829d  28
+Summary  10.1.255.3       10.1.255.1       0x80000003  2498  0x22 0x849a  28
+Summary  10.1.255.4       10.1.255.1       0x80000003  1615  0x22 0x8498  28
+Summary  10.1.255.5       10.1.255.1       0x80000003  1086  0x22 0x70ac  28
+Summary  10.1.255.6       10.1.255.1       0x80000003   733  0x22 0x70aa  28
+Summary *10.1.255.9       10.1.255.8       0x80000002  2469  0x22 0x16fd  28
+Summary  10.2.3.0         10.1.255.1       0x80000004  1262  0x22 0x73a9  28
+Summary  10.2.5.0         10.1.255.1       0x80000004   556  0x22 0x5dbd  28
+Summary  10.3.4.0         10.1.255.1       0x80000004    27  0x22 0x66b3  28
+Summary  10.5.6.0         10.1.255.1       0x80000003   910  0x22 0x3adc  28
+Summary *10.8.9.0         10.1.255.8       0x80000003  1342  0x22 0xb655  28
+
+    OSPF database, Area 0.0.0.4
+ Type       ID               Adv Rtr           Seq      Age  Opt  Cksum  Len 
+Router  *10.1.255.8       10.1.255.8       0x80000003  2828  0x22 0x7235  48
+Router   10.1.255.9       10.1.255.9       0x80000004  2472  0x22 0x7f02  60
+Summary *10.1.2.0         10.1.255.8       0x80000001     7  0x22 0x70a9  28
+Summary *10.1.7.0         10.1.255.8       0x80000003   593  0x22 0x2be8  28
+Summary *10.1.255.1       10.1.255.8       0x80000001     7  0x22 0x72a9  28
+Summary *10.1.255.2       10.1.255.8       0x80000001     7  0x22 0x72a7  28
+Summary *10.1.255.3       10.1.255.8       0x80000001     7  0x22 0x72a5  28
+Summary *10.1.255.4       10.1.255.8       0x80000001     7  0x22 0x72a3  28
+Summary *10.1.255.5       10.1.255.8       0x80000001     7  0x22 0x5eb7  28
+Summary *10.1.255.6       10.1.255.8       0x80000001     7  0x22 0x5eb5  28
+Summary *10.1.255.7       10.1.255.8       0x80000003   218  0x22 0x28ec  28
+Summary *10.1.255.8       10.1.255.8       0x80000003  2091  0x22 0x1401  28
+Summary *10.2.3.0         10.1.255.8       0x80000001     7  0x22 0x63b3  28
+Summary *10.2.5.0         10.1.255.8       0x80000001     7  0x22 0x4dc7  28
+Summary *10.3.4.0         10.1.255.8       0x80000001     7  0x22 0x56bd  28
+Summary *10.5.6.0         10.1.255.8       0x80000001     7  0x22 0x28e7  28
+Summary *10.7.8.0         10.1.255.8       0x80000003  1717  0x22 0xcd40  28
