@@ -1,0 +1,40 @@
+Graceful Restart:
+
+    An OSPF router restarts its routing process:
+        -> Your neighbors stop receiving Hello Packets
+        -> Dead timer expires:
+        --> Down state
+        --> New LSA, therefore new SPF calculations
+
+    OSPF router recovers:
+        -> reestablish adjacencies
+        -> Neighbors reflood their LSAs:
+        --> rerun SPF algorithm
+
+    To solve delays transmissions or dropped packets:
+        -> Graceful restart (or hitless start):
+        --> restart a routing process without causing network instability
+        -> Conditions to perfom Graceful Restart:
+        --> capable of forwarding packtes while processing is restarting (routing and forwarding planes separated)
+        --> network topology must be stable
+        --> neighbors must support the graceful restart process
+
+    Restart Operation:
+        -> a restart is about to start
+        -> Restart Candidate:
+        --> restarting router stores the CURRENT FORWARDING table in memory + CURRENT ADJANCIES + NETWORK CONFIGURATION and send a NOTIFICATION
+        -> asks each neighbor for assistance:
+        --> Helper:
+        ---> receives a notification message, maintains Full adj and DO NOT flood new LSA
+        --> Possible Helper:
+        ---> default operational state
+
+    Grace LSA:
+        -> message exchanged between the restart candidate and the helper (LSA type 9 - link-local)
+        -> opaque type: 3 (8 bits), opaque ID: 0 (24 bits) + TLV 
+        -> Grace Period (1):
+        --> after this timer expires the Helper flushes the Adj and floods LSAs
+        -> Hitless Restard Reason (2):
+        --> 0 - Unknown, 1 - Software restart, 2 - Software upgrade/reload, 3 - switch to redundant control processor
+        -> IP Interface Address (3):
+        --> grace LSA on a brodcast or NBMA network. So neighbors can identify the restating router
